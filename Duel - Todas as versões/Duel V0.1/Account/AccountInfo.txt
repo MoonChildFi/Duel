@@ -1,3 +1,0 @@
-Nome: 123
-Senha: 123
-Idioma: Português (BR) 

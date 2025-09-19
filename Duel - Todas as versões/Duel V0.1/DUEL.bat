@@ -1,4 +1,5 @@
 @echo off
 cd assets
-node menu.js
+color 06
+node lang.js
 PAUSE
