@@ -3,7 +3,51 @@ const prompt = require('prompt-sync')();
 const fs = require('fs');
 const path = require('path');
 
+//ESPECIAL
+const caracter = '='
+const larguradoterminal = process.stdout.columns
+const linha = caracter.repeat(larguradoterminal)
+
+
 //Funcões
+function Saude() {
+console.clear()
+centertext("==============================================================")
+centertext("- INFORMAÇÕES SOBRE A SUA SAÚDE -")
+centertext("==============================================================")
+centertext("Sua saude atual é de "+Saude1)
+pausarParaContinuar()
+}
+
+function Honra() {
+console.clear()
+centertext("==============================================================")
+centertext("- INFORMAÇÕES SOBRE A SUA HONRA -")
+centertext("==============================================================")
+centertext("Sua honra atual é de "+honra1)
+pausarParaContinuar()
+}
+
+function MenosHonra() {
+console.clear()
+centertext("==============================================================")
+centertext("- INFORMAÇÕES SOBRE A SUA HONRA -")
+centertext("==============================================================")
+honra1-=10
+centertext("Sua honra caiu para "+honra1)
+pausarParaContinuar()
+}
+
+function MaisHonra() {
+console.clear()
+centertext("==============================================================")
+centertext("- INFORMAÇÕES SOBRE A SUA HONRA -")
+centertext("==============================================================")
+honra1+=10
+centertext("Sua honra subiu para "+honra1)
+pausarParaContinuar()
+}
+
 function Pistas() {
     console.clear()
     centertext("==============================================================")
@@ -11,11 +55,16 @@ function Pistas() {
     centertext("==============================================================")
 
     if (pistaxerife) {
+        contadorpistas++
         if (!xerife) {
         centertext("[01] - VOCÊ DEVERIA VISITAR O XERIFE!")
         } else {
         centertext("[DESCARTADO] - VOCÊ DEVERIA VISITAR O XERIFE!")
         }
+    }
+
+     if (contadorpistas == 0) {
+        centertext("- VOCÊ NÃO ACHOU NENHUMA PISTA AINDA! -")
     }
 
 pausarParaContinuar()
@@ -54,11 +103,11 @@ function pausarParaFechar() {
 
 function opcaoinvalidanoclose() {
     console.clear()
-    centertext("==============================================================")
+    centertext(linha)
     centertext("[OPÇÃO INVALIDA]")
-    centertext("==============================================================");
+    centertext(linha)
     centertext("[PRESSIONE ENTER PARA VOLTAR]");
-    centertext("==============================================================");
+    centertext(linha)
     prompt();
     console.clear();
 
@@ -66,11 +115,11 @@ function opcaoinvalidanoclose() {
 
 function Opcãoinvalida() {
     console.clear()
-    console.log("===========================================================================");
+    centertext(linha)
     console.log("[OPÇÃO INVALIDA - PUNIÇÃO: FECHAR O JOGO]")
-    console.log("===========================================================================");
+    centertext(linha)
     console.log("[PRESSIONE ENTER PARA FECHAR]");
-    console.log("===========================================================================");
+    centertext(linha)
     prompt("")
     process.exit(90)
 }
@@ -89,6 +138,7 @@ function pausarParaContinuarA() {
     centertext("==============================================================");
     prompt();
 }
+
 
 function centertext(text) {
     const terminalWidth = process.stdout.columns;
@@ -132,9 +182,16 @@ let dono=false
 let velho=false
 let pianista=false
 let jogoativo = true;
+let jogoativo2 = true;
 let pistaxerife = false
 let bebado = 0
-
+let contadorpistas = 0
+let xerife = false
+let honra1 = 100
+let Saude1 = 100
+let conflitoresolvido = false
+let conflitorodadas = 0;
+let ignorerodadas = 0
 
 //Jogo em si
 console.clear();
@@ -151,7 +208,7 @@ logoincial()
     centertext("==============================================================")
     centertext("-- Cada jogador começa com 100 pontos de vida --")
     centertext("-- Utilize apenas numeros indicados nas opções --")
-    centertext("-- Evite mudar o tamanho do terminal. --")
+    centertext("-- NÃO mude o tamanho do terminal. --")
     centertext("-- Divirta-se! --")
     pausarParaContinuar();
 
@@ -168,6 +225,7 @@ logoincial()
     } else {
         jogadorpadrao=false
     }
+    centertext("Certo... "+nomeJogador)
     pausarParaContinuar();
 
 
@@ -213,14 +271,14 @@ logoincial()
     centertext("==============================================================")
     centertext("INTERAÇÕES")
     centertext("==============================================================")
-    centertext("[01] DONO DO BAR")
-    centertext("[02] VELHO BÊBADO")
-    centertext("[03] PIANISTA")
-    centertext("[04] DAMA ELEGANTE")
-    centertext("[05] SAIR DO SALOON")
+    centertext("[01] DONO DO BAR     ")
+    centertext("[02] VELHO BÊBADO    ")
+    centertext("[03] PIANISTA        ")
+    centertext("[04] DAMA ELEGANTE   ")
+    centertext("[05] SAIR DO SALOON  ")
     centertext("[06] CONSULTAR PISTAS")
     centertext("==============================================================")
-    centertext("COMANDO? (1-5)")
+    centertext("COMANDO? (1-6)")
     centertext("==============================================================")
     let bar = Number(prompt(">> "));
 
@@ -366,13 +424,151 @@ dama=true
     } else {
         opcaoinvalidanoclose()
     }
+
     }
 
+    while (!conflitoresolvido) {
+    console.clear()
+    if (conflitorodadas == 0) {
+    centertext("==============================================================")
+    centertext("CONFLITO - CAPANGAS DE SILAS")
+    centertext("==============================================================")
+    centertext("Ao sair do Saloon, os capangas de Silas te reconhecem e o confrotam!")
+    centertext("==============================================================")
+    centertext("INTERAÇÕES")
+    centertext("==============================================================")
+    centertext("[01] LUTAR              ")
+    centertext("[02] POUPAR             ")
+    centertext("[03] TENTAR COMPRAR ELES")
+    centertext("==============================================================")
+    conflitorodadas+=1
+} else {
+        centertext("==============================================================")
+    centertext("CONFLITO - RODADA N°"+conflitorodadas)
+    centertext("==============================================================")
+    centertext("INTERAÇÕES")
+    centertext("==============================================================")
+    centertext("[01] LUTAR              ")
+    centertext("[02] POUPAR             ")
+    centertext("[03] TENTAR COMPRAR ELES")
+    centertext("==============================================================")
+    conflitorodadas+=1
+}
+    let conflito1 = Number(prompt(">> "))
+
+    if (conflito1 == 1) {
+    console.clear()
+
+    } else if (conflito1 == 2) {
+    console.clear()
+    if (ignorerodadas < 100) {
+    ignorerodadas+=40
+    centertext("==============================================================")
+    centertext("Você escolhe poupar os capangas!")
+    centertext("Eles te ignoram e atacam você...")
+    pausarParaContinuar()
+    centertext("==============================================================")
+    if (Math.random() < 0.4) {
+    centertext("Os capangas acertam um golpe com uma madeira")
+    centertext("Você perdeu 10 pontos de Saúde!")
+    Saude1-=10
+    } else if (Math.random() >= 0.4 && Math.random() <= 0.7) {
+        centertext("Os capangas acertam um golpe com uma pá")
+        centertext("Você perdeu 30 pontos de Saúde!")
+        Saude1-=30
+    } else {
+        centertext("Os capangas acertam um golpe com uma foice")
+        centertext("Você perdeu 70 pontos de Saúde!")
+        Saude1-=70
+    }
+
+    pausarParaContinuar()
+    Saude()
+
+    } else {
+    centertext("==============================================================")
+    centertext("Você poupa os capangas novamente e eles ficam entediados!")
+    centertext("==============================================================")
+    centertext("O que te permite fugir deles.")
+    centertext("Porém, eles entram no Saloon procurando por você")
+    centertext("eles não te encontram então punem as pessoas dentro do local.")
+    centertext("COM A MORTE!")
+    conflitoresolvido=true
+    pausarParaContinuar()
+    MenosHonra()
+    Saude()
+    }
+
+    } else if (conflito1 == 3) {
+        if (contadorotario == 0) {
+    centertext("==============================================================")
+    centertext("AVISO")
+    centertext("==============================================================")
+    centertext("NARRADOR: 'Você acha que estamos na era moderna? ")
+    centertext("aqui dinheiro não é tão facil de conseguir não...'")
+    pausarParaContinuar()
+        } else if (contadorotario == 1) {
+            centertext("==============================================================")
+    centertext("AVISO")
+    centertext("==============================================================")
+    centertext("NARRADOR: 'Você é do tipo que não desite tão facil né")
+    centertext("VOCÊ NÃO TEM DINHEIRO, AGORA TENTA OUTRA OPCÃO!'")
+    pausarParaContinuar()
+        } else if (contadorotario == 2){
+            centertext("==============================================================")
+    centertext("AVISO")
+    centertext("==============================================================")
+    centertext("NARRADOR: 'Olha... se você não quiser ver o que eu tenho guardado é melhor desistir...")
+    pausarParaContinuar()
+} else {
+    
+}
+
+
+    } else {
+        opcaoinvalidanoclose()
+    }
+
+}
     //CENARIO 1.2 - jogoativo2
+    while(jogoativo2) {
+        
+        console.clear()
     centertext("==============================================================")
     centertext("CENARIO 1.2 - RUAS DA RED ROCK")
     centertext("==============================================================")
+    centertext("Você está nas ruas de Red Rock...")
+    centertext("==============================================================")
+    centertext("INTERAÇÕES")
+    centertext("==============================================================")
+    centertext("[01] CONSULTAR PISTAS   ")
+    if (pistaxerife) {
+        centertext("[02] IR PARA A DELEGACIA")
+    }
+    centertext("==============================================================")
+    let rua = Number(prompt(">> "))
+
+    if (rua == 1) {
+        Pistas()
+    } else if (rua == 2) {
+        
+        console.clear()
+        centertext("==============================================================")
+        centertext("Você decidi ir para a delegacia...")
+        centertext("==============================================================")
+        centertext("Dentro da delegacia, você imediatamente fala com o xerife sobre o Silas")
+        centertext("==============================================================")
+        centertext("DIALOGO - XERIFE LOCAL")
+        centertext("==============================================================")
+        centertext(nomeJogador+": ")
 
 
+
+
+
+    } else {
+        opcaoinvalidanoclose()
+    }
+    }
 //Criação de conquistas
 
